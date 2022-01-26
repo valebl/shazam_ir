@@ -9,8 +9,7 @@ from matplotlib.ticker import ScalarFormatter
 from matplotlib.ticker import SymmetricalLogLocator
 from scipy.signal import argrelextrema
 
-# FRAME_SIZE = 2048
-# HOP_SIZE = 512
+
 
 def processAudioFile(audioFile, FRAME_SIZE, HOP_SIZE):
 
@@ -104,3 +103,16 @@ def plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies):
     axes.xaxis.set_label_text("Time [s]")
     plt.title('Constellation Map')
     plt.show()
+
+
+if __name__ == '__main__':
+
+    dir = '../resources/'
+    audioFile = 'Coldplay-VioletHill.wav'
+    FRAME_SIZE = 2048
+    HOP_SIZE = 512
+
+    times, frequencies, y_log_audio = processAudioFile(dir+audioFile, FRAME_SIZE, HOP_SIZE)
+    print(f'file {audioFile} processed...')
+
+    plotSpectrogram(times, frequencies, y_log_audio)
