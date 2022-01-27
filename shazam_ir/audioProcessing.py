@@ -3,11 +3,9 @@ import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 import librosa.display
-import IPython.display as ipd
 
 from matplotlib.ticker import ScalarFormatter
-from matplotlib.ticker import SymmetricalLogLocator
-from scipy.signal import argrelextrema
+from skimage.feature import peak_local_max
 
 
 
@@ -47,11 +45,13 @@ def makePeaksConstellation(times, frequencies, amplitudes, ampThresh):
       a candidate peak
     '''
 
-    peaks = argrelextrema(amplitudes > ampThresh, np.greater)
-    correspondentTime = lambda i: times[i]
-    correspondentFreq = lambda i: frequencies[i]
-    peaksFrequencies = correspondentFreq(peaks[0])
-    peaksTimes = correspondentTime(peaks[1])
+    peaks = peak_local_max(amplitudes, threshold_abs=ampThresh)
+    peaksSplitted = np.hsplit(peaks, 2)
+    i = peaksSplitted[0]
+    j = peaksSplitted[1]
+
+    peaksFrequencies = frequencies[i]
+    peaksTimes = times[j]
 
     return peaksTimes, peaksFrequencies
 
@@ -79,7 +79,7 @@ def plotSpectrogram(times, frequencies, amplitudes):
     axes.xaxis.set_label_text("Time [s]")
     fig.colorbar(out)
     plt.title('Spectrogram')
-    plt.show()
+    plt.savefig('Spectrogram.jpg')
 
     
 def plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies):
@@ -94,7 +94,7 @@ def plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies):
 
     fig, ax = plt.subplots(figsize=(25,10))
     axes = plt.gca()
-    out = axes.scatter(peaksTimes, peaksFrequencies, s=5)
+    out = axes.scatter(peaksTimes, peaksFrequencies, marker='x', s=20)
     axes.set_ylim(frequencies.min(), frequencies.max())
     thresh = librosa.note_to_hz("C2") # Defines the range (-x, x), within which the plot is linear
     axes.set_yscale('symlog', base=2, linthresh=thresh)
@@ -102,7 +102,7 @@ def plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies):
     axes.yaxis.set_label_text("Frequency [Hz]")
     axes.xaxis.set_label_text("Time [s]")
     plt.title('Constellation Map')
-    plt.show()
+    plt.savefig('Constellation.jpg')
 
 
 if __name__ == '__main__':
@@ -111,8 +111,14 @@ if __name__ == '__main__':
     audioFile = 'Coldplay-VioletHill.wav'
     FRAME_SIZE = 2048
     HOP_SIZE = 512
+    AMP_THRES = 3
 
     times, frequencies, y_log_audio = processAudioFile(dir+audioFile, FRAME_SIZE, HOP_SIZE)
     print(f'file {audioFile} processed...')
 
     plotSpectrogram(times, frequencies, y_log_audio)
+
+    peaksTimes, peaksFrequencies = makePeaksConstellation(times, frequencies, y_log_audio, AMP_THRES)
+    print(f'peaks identified...')
+
+    plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies)
