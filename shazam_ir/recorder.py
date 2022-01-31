@@ -30,9 +30,11 @@ class Recorder():
         self.buttons.pack(fill=tk.BOTH)
         # Start and Stop buttons
         self.start_rec = tkinter.Button(self.buttons, width=20, padx=10,
-            pady=5, text='Start Recording', command=lambda: self.start(), bg='white')
+            pady=5, text='Start Recording', command=lambda: self.start(),
+            bg='white')
         self.start_rec.grid(row=0, column=0, padx=50, pady=5)
-        self.stop_rec = tkinter.Button(self.buttons, width=20, padx=10, pady=5,
+        self.stop_rec = tkinter.Button(self.buttons, width=20, padx=10,
+            pady=5,
             text='Stop Recording', command=lambda: self.stop(), bg='white')
         self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
 
@@ -42,7 +44,8 @@ class Recorder():
         
         
     def start(self):
-        self.start_rec.configure(bg='red', text='Recording...', state='disabled')
+        self.start_rec.configure(bg='red', text='Recording...',
+            state='disabled')
         self._audio = pyaudio.PyAudio()
         self._stream = self._audio.open(format=self._format,
                                       channels=self._channels,
