@@ -1,12 +1,11 @@
 import os
+
 import librosa
 import numpy as np
 import matplotlib.pyplot as plt
 import librosa.display
-
 from matplotlib.ticker import ScalarFormatter
 from skimage.feature import peak_local_max
-
 
 
 def process_audio_file(audio_file, frame_size, hop_size):
@@ -67,8 +66,8 @@ def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
     return peaks_times, peaks_frequencies
 
   
-def create_fingerprints(peaks_times, peaks_frequencies, offset_time, offset_freq,
-    delta_time, delta_freq):
+def create_fingerprints(peaks_times, peaks_frequencies, offset_time,
+    offset_freq, delta_time, delta_freq):
 
     '''create_fingerprints processes the spectogram peaks into the audio
     fingerprints.
@@ -85,10 +84,10 @@ def create_fingerprints(peaks_times, peaks_frequencies, offset_time, offset_freq
         Returns a list containing the fingerprints (hash codes).
     '''
 
-    def pairs_from_anchor_point(anchor_point_time, anchor_point_freq):
+    def pairs_from_anchor_point(anchor_time, anchor_freq):
 
-        start_time = anchor_point_time + offset_time
-        start_freq = anchor_point_freq + offset_freq
+        start_time = anchor_time + offset_time
+        start_freq = anchor_freq + offset_freq
         i = 0
         nPairs = 0
         for t in peaks_times:
@@ -96,8 +95,8 @@ def create_fingerprints(peaks_times, peaks_frequencies, offset_time, offset_freq
                 f = peaks_frequencies[i]
                 if (f > start_freq and f < start_freq + delta_freq):
                     if nPairs < fan_out:
-                        hash_list.append([t[0], anchor_point_freq[0], f[0],
-                        t[0] - anchor_point_time[0]])
+                        hash_list.append([t[0], anchor_freq[0], f[0],
+                        t[0] - anchor_time[0]])
                         nPairs += 1
                     else:
                         break
@@ -105,8 +104,8 @@ def create_fingerprints(peaks_times, peaks_frequencies, offset_time, offset_freq
 
     hash_list = []
     fan_out = 10
-    for anchor_point_time, anchor_point_freq in zip(peaks_times, peaks_frequencies):
-        pairs_from_anchor_point(anchor_point_time, anchor_point_freq)
+    for anchor_time, anchor_freq in zip(peaks_times, peaks_frequencies):
+        pairs_from_anchor_point(anchor_time, anchor_freq)
 	
     return hash_list
 
@@ -179,8 +178,8 @@ if __name__ == '__main__':
 
     plot_spectrogram(times, frequencies, y_log_audio)
 
-    peaks_times, peaks_frequencies = make_peaks_constellation(times, frequencies,
-        y_log_audio, AMP_THRES)
+    peaks_times, peaks_frequencies = make_peaks_constellation(times,
+        frequencies, y_log_audio, AMP_THRES)
     print(f'peaks identified...')
 
     plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies)    
