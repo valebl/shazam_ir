@@ -9,14 +9,14 @@ from skimage.feature import peak_local_max
 
 
 
-def processAudioFile(audioFile, frameSize, hopSize):
+def process_audio_file(audio_file, frame_size, hop_size):
 
-    '''processAudioFile takes a .wav audio file and returns the
+    '''process_audio_file takes a .wav audio file and returns the
     parameters defining its spectrogram, calculated using the library librosa.
 
     Args:
-        audioFile: audio track in .wav format
-        frameSize: number of samples in the time frame - should be a
+        audio_file: audio track in .wav format
+        frame_size: number of samples in the time frame - should be a
             power of two
         op_size: number of time samples in between successive frames - should
             be a power of two
@@ -26,21 +26,21 @@ def processAudioFile(audioFile, frameSize, hopSize):
         frequency samples in Hz and a 2D array of the amplitude in dB.
     '''
 
-    audioSignal, sampleRate = librosa.load(audioFile)
-    audioStft = librosa.stft(audioSignal, n_fft=frameSize,
-        hop_length=hopSize)  # Short-Time Fourier-Transform
-    y_audio = np.abs(audioStft)**2
+    audio_signal, sample_rate = librosa.load(audio_file)
+    audio_stft = librosa.stft(audio_signal, n_fft=frame_size,
+        hop_length=hop_size)  # Short-Time Fourier-Transform
+    y_audio = np.abs(audio_stft)**2
     y_log_audio = librosa.power_to_db(y_audio)  # Decibel
     times = librosa.frames_to_time(np.arange(y_log_audio.shape[1]),
-        sr=sampleRate, hop_length=hopSize)
-    frequencies = librosa.fft_frequencies(sr=sampleRate, n_fft=frameSize)
+        sr=sample_rate, hop_length=hop_size)
+    frequencies = librosa.fft_frequencies(sr=sample_rate, n_fft=frame_size)
 
     return times, frequencies, y_log_audio
 
 
-def makePeaksConstellation(times, frequencies, amplitudes, ampThresh):
+def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
 
-    '''makePeaksConstellation identifies peaks in the spectrogram. Peaks are
+    '''make_peaks_constellation identifies peaks in the spectrogram. Peaks are
     time-frequency points that have higher energy content then all
     their neighbours. An minimum amplitude threshold is also considered.
 
@@ -49,7 +49,7 @@ def makePeaksConstellation(times, frequencies, amplitudes, ampThresh):
         frequencies: array containing the frequency samples
         amplitudes = array containing the spectrogram amplitudes
             amplitudes.shape = (frequencies.shape, times.shape)    
-        ampThresh: minimum amplitude value for a point to be considered
+        amp_thresh: minimum amplitude value for a point to be considered
             a candidate peak
 
     Returns:
@@ -57,68 +57,66 @@ def makePeaksConstellation(times, frequencies, amplitudes, ampThresh):
         frequency coordinates of the spectogram peaks.
     '''
 
-    peaks = peak_local_max(amplitudes, threshold_abs=ampThresh)
-    peaksSplitted = np.hsplit(peaks, 2)
-    i = peaksSplitted[0]
-    j = peaksSplitted[1]
-    peaksFrequencies = frequencies[i]
-    peaksTimes = times[j]
+    peaks = peak_local_max(amplitudes, threshold_abs=amp_thresh)
+    peaks_splitted = np.hsplit(peaks, 2)
+    i = peaks_splitted[0]
+    j = peaks_splitted[1]
+    peaks_frequencies = frequencies[i]
+    peaks_times = times[j]
 
-    return peaksTimes, peaksFrequencies
+    return peaks_times, peaks_frequencies
 
   
-def createFingerprints(peaksTimes, peaksFrequencies, offsetTime, offsetFreq,
-    deltaTime, deltaFreq):
+def create_fingerprints(peaks_times, peaks_frequencies, offset_time, offset_freq,
+    delta_time, delta_freq):
 
-    '''createFingerprints processes the spectogram peaks into the audio
+    '''create_fingerprints processes the spectogram peaks into the audio
     fingerprints.
 
     Args:
-        peaksTimes: 
-        peaksFrequencies:
-        offsetTIme:
-        offsetFrequency
-        deltaTime:
-        deltaFreq:
+        peaks_times: 
+        peaks_frequencies:
+        offset_time:
+        offset_frequency
+        delta_time:
+        delta_freq:
     
     Returns:
-        Reaturns a list containing the fingerprints (hash codes).
+        Returns a list containing the fingerprints (hash codes).
     '''
 
-    def pairsFromAnchorPoint(anchorPointTime, anchorPointFreq):
+    def pairs_from_anchor_point(anchor_point_time, anchor_point_freq):
 
-        startTime = anchorPointTime + offsetTime
-        startFreq = anchorPointFreq + offsetFreq
+        start_time = anchor_point_time + offset_time
+        start_freq = anchor_point_freq + offset_freq
         i = 0
         nPairs = 0
-        for t in peaksTimes:
-            if (t > startTime and t < startTime + deltaTime):
-                f = peaksFrequencies[i]
-                if (f > startFreq and f < startFreq + deltaFreq):
-                    if nPairs < fanOut:
-                        hashList.append([t[0], anchorPointFreq[0], f[0],
-                        t[0] - anchorPointTime[0]])
+        for t in peaks_times:
+            if (t > start_time and t < start_time + delta_time):
+                f = peaks_frequencies[i]
+                if (f > start_freq and f < start_freq + delta_freq):
+                    if nPairs < fan_out:
+                        hash_list.append([t[0], anchor_point_freq[0], f[0],
+                        t[0] - anchor_point_time[0]])
                         nPairs += 1
                     else:
                         break
             i += 1    
 
-    hashList = []
-    fanOut = 10
-    for anchorTime, anchorFrequency in zip(peaksTimes, peaksFrequencies):
-        pairsFromAnchorPoint(peaksTimes, peaksFrequencies, anchorTime,
-            anchorFrequency, offsetTime, offsetFreq, deltaTime, deltaFreq,
-            hashList, fanOut)
+    hash_list = []
+    fan_out = 10
+    for anchor_point_time, anchor_point_freq in zip(peaks_times, peaks_frequencies):
+        pairs_from_anchor_point(anchor_point_time, anchor_point_freq)
 	
-    return hashList
+    return hash_list
 
 
         
 
 
-def plotSpectrogram(times, frequencies, amplitudes):
+def plot_spectrogram(times, frequencies, amplitudes):
 
-    '''plotSpectrogram plots the spectrogram.
+    '''plot_spectrogram plots the spectrogram.
 
     Args:
         times: array containing the time samples
@@ -143,19 +141,19 @@ def plotSpectrogram(times, frequencies, amplitudes):
     plt.savefig('Spectrogram.jpg')
 
     
-def plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies):
+def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies):
 
-    '''plotPeaksConstellation plots the constallation map for the
+    '''plot_peaks_constellation plots the constallation map for the
         spectrogram peaks.
     Args:
         frequencies: array containing the frequency samples
-        peaksTimes: time values for the peaks
-        peaksFrequencies: frequency values for the peaks
+        peaks_times: time values for the peaks
+        peaks_frequencies: frequency values for the peaks
     '''
 
     fig, ax = plt.subplots(figsize=(25,10))
     axes = plt.gca()
-    out = axes.scatter(peaksTimes, peaksFrequencies, marker='x', s=20)
+    out = axes.scatter(peaks_times, peaks_frequencies, marker='x', s=20)
     axes.set_ylim(frequencies.min(), frequencies.max())
     thresh = librosa.note_to_hz("C2")  # Defines the range (-x, x)
                                        # within which the plot is linear
@@ -170,19 +168,19 @@ def plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies):
 if __name__ == '__main__':
 
     dir = '../resources/'
-    audioFile = 'Coldplay-VioletHill.wav'
+    audio_file = 'Coldplay-VioletHill.wav'
     FRAME_SIZE = 2048
     HOP_SIZE = 512
     AMP_THRES = 35
 
-    times, frequencies, y_log_audio = processAudioFile(dir+audioFile,
+    times, frequencies, y_log_audio = process_audio_file(dir+audio_file,
         FRAME_SIZE, HOP_SIZE)
-    print(f'file {audioFile} processed...')
+    print(f'file {audio_file} processed...')
 
-    plotSpectrogram(times, frequencies, y_log_audio)
+    plot_spectrogram(times, frequencies, y_log_audio)
 
-    peaksTimes, peaksFrequencies = makePeaksConstellation(times, frequencies,
+    peaks_times, peaks_frequencies = make_peaks_constellation(times, frequencies,
         y_log_audio, AMP_THRES)
     print(f'peaks identified...')
 
-    plotPeaksConstellation(frequencies, peaksTimes, peaksFrequencies)    
+    plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies)    
