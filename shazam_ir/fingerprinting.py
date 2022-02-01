@@ -35,6 +35,13 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
 
 if __name__ == '__main__':
 
+    import time
+
     dir = '../resources/'
     audio_file = 'Coldplay-VioletHill.wav'
+
+    time_start = time.time()
     fingerprints = make_fingerprint(dir + audio_file)
+    time_end = time.time()
+
+    print(f'Running time: {time_end - time_start} s') 
