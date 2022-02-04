@@ -1,3 +1,4 @@
+import time
 import librosa
 import numpy as np
 import matplotlib.pyplot as plt
@@ -23,6 +24,7 @@ def process_audio_file(audio_file, frame_size, hop_size):
         frequency samples in Hz and a 2D array of the amplitude in dB.
     '''
 
+    start = time.time()
     audio_signal, sample_rate = librosa.load(audio_file)
     audio_stft = librosa.stft(audio_signal, n_fft=frame_size,
         hop_length=hop_size)  # Short-Time Fourier-Transform
@@ -31,6 +33,8 @@ def process_audio_file(audio_file, frame_size, hop_size):
     times = librosa.frames_to_time(np.arange(y_log_audio.shape[1]),
         sr=sample_rate, hop_length=hop_size)
     frequencies = librosa.fft_frequencies(sr=sample_rate, n_fft=frame_size)
+    end = time.time()
+    print(f'process_audio_file took {end - start} s')
 
     return times, frequencies, y_log_audio
 
@@ -54,16 +58,19 @@ def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
         frequency coordinates of the spectogram peaks.
     '''
 
+    start = time.time()
     peaks = peak_local_max(amplitudes, threshold_abs=amp_thresh)
     peaks_splitted = np.hsplit(peaks, 2)
     i = peaks_splitted[0]
     j = peaks_splitted[1]
     peaks_frequencies = frequencies[i]
     peaks_times = times[j]
+    end = time.time()
+    print(f'make_peaks_constellation took {end - start} s')
 
     return peaks_times, peaks_frequencies
 
-  
+
 def make_combinatorial_hashes(peaks_times, peaks_frequencies, offset_time,
     offset_freq, delta_time, delta_freq):
 
@@ -79,7 +86,8 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies, offset_time,
         delta_freq:
     
     Returns:
-        Returns a list containing the hases.
+        Returns a dictionary where hashes are the keys and the time
+        offset is the associated value.
     '''
 
     def pairs_from_anchor_point(anchor_time, anchor_freq):
@@ -88,24 +96,28 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies, offset_time,
         start_freq = anchor_freq + offset_freq
         i = 0
         nPairs = 0
+
         for t in peaks_times:
-            if (t > start_time and t < start_time + delta_time):
-                f = peaks_frequencies[i]
-                if (f > start_freq and f < start_freq + delta_freq):
-                    if nPairs < fan_out:
-                        hash_list.append([t[0], anchor_freq[0], f[0],
-                        t[0] - anchor_time[0]])
-                        nPairs += 1
-                    else:
-                        break
+            f = peaks_frequencies[i]
+            if (t > start_time and t < start_time + delta_time and
+                    f > start_freq and f < start_freq + delta_freq and
+                    nPairs < fan_out):
+                hash_dict[hash((anchor_freq[0], f[0],
+                t[0] - anchor_time[0]))] = anchor_time[0]
+                nPairs += 1
+            else:
+                break
             i += 1    
 
-    hash_list = []
+    start = time.time()
+    hash_dict = dict()
     fan_out = 10
     for anchor_time, anchor_freq in zip(peaks_times, peaks_frequencies):
         pairs_from_anchor_point(anchor_time, anchor_freq)
+    end = time.time()
+    print(f'make_combinatorial_hashes took {end - start} s') 
 	
-    return hash_list       
+    return hash_dict       
 
 
 def plot_spectrogram(times, frequencies, amplitudes):

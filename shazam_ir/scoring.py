@@ -3,15 +3,16 @@ import numpy as np
 def compute_track_score(fingerprints_track, fingerprints_recording,
     return_offset_differences = False):
 
-    time_offset_differences = []
+    time_offset_diff = []
 
-    [[time_offset_differences.append((h[0] - hS[0])) if hS[1:] == h[1:]
-        else None for h in fingerprints_track] for hS in fingerprints_recording]
+    [time_offset_diff.append((fingerprints_track[k] -
+        fingerprints_recording[k])) if k in fingerprints_track else None
+        for k in fingerprints_recording.keys()]   
     
     if not return_offset_differences:
-        return max(np.histogram(time_offset_differences, bins='auto')[0])
+        return max(np.histogram(time_offset_diff, bins='auto')[0])
     else:
-        return max(np.histogram(time_offset_differences, bins='auto')[0]), time_offset_differences
+        return max(np.histogram(time_offset_diff, bins='auto')[0]), time_offset_diff
 
 
 if __name__ == '__main__':
@@ -20,15 +21,19 @@ if __name__ == '__main__':
     import time
 
     dir = '../resources/'
-    track_file = 'Coldplay-VioletHill.wav'
+    track_file = 'Elliott Smith-AFondFarewell.wav' # 'Coldplay-VioletHill.wav'
     sample_file = 'Sample.wav'
-    
+
+    start = time.time()  
     fingerprints_track = make_fingerprint(dir + track_file)
+    end = time.time()
+    print(f'make_fingerprint on track took: {end - start} s') 
+
     fingerprints_sample = make_fingerprint(dir + sample_file)
 
-    time_start = time.time()
+    start = time.time()
     score = compute_track_score(fingerprints_track, fingerprints_sample)
-    time_end = time.time()
-    print(score)
+    end = time.time()
+    print(f'Score: {score}')
     
-    print(f'Running time: {time_end - time_start} s') 
+    print(f'compute_track_score took: {end - start} s') 
