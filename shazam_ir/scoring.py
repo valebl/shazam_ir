@@ -1,7 +1,7 @@
 import numpy as np
+from helpers import plot_matching_hash_locations, plot_histogram_time_offsets_differences
 
-def compute_track_score(fingerprints_track, fingerprints_recording,
-    return_offset_differences = False):
+def compute_track_score(fingerprints_track, fingerprints_recording):
 
     time_offset_diff = []
 
@@ -9,11 +9,20 @@ def compute_track_score(fingerprints_track, fingerprints_recording,
         fingerprints_recording[k])) if k in fingerprints_track else None
         for k in fingerprints_recording.keys()]   
     
-    if not return_offset_differences:
-        return max(np.histogram(time_offset_diff, bins='auto')[0])
-    else:
-        return max(np.histogram(time_offset_diff, bins='auto')[0]), time_offset_diff
+    return max(np.histogram(time_offset_diff, bins='auto')[0])
 
+def compute_track_score_with_plots(fingerprints_track, fingerprints_recording):
+
+    matches = []
+
+    [matches.append([fingerprints_track[k], fingerprints_recording[k], fingerprints_track[k] -
+        fingerprints_recording[k]]) if k in fingerprints_track else None
+        for k in fingerprints_recording.keys()]   
+
+    plot_matching_hash_locations([m[0] for m in matches],[m[1] for m in matches])
+    plot_histogram_time_offsets_differences([m[2] for m in matches])
+    
+    return max(np.histogram([m[2] for m in matches], bins='auto')[0])
 
 if __name__ == '__main__':
 
@@ -21,7 +30,7 @@ if __name__ == '__main__':
     import time
 
     dir = '../resources/'
-    track_file = 'Elliott Smith-AFondFarewell.wav' # 'Coldplay-VioletHill.wav'
+    track_file = 'Coldplay-VioletHill.wav'
     sample_file = 'Sample.wav'
 
     start = time.time()  
@@ -32,7 +41,7 @@ if __name__ == '__main__':
     fingerprints_sample = make_fingerprint(dir + sample_file)
 
     start = time.time()
-    score = compute_track_score(fingerprints_track, fingerprints_sample)
+    score = compute_track_score_with_plots(fingerprints_track, fingerprints_sample)
     end = time.time()
     print(f'Score: {score}')
     

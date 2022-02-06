@@ -95,19 +95,19 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies, offset_time,
         start_time = anchor_time + offset_time
         start_freq = anchor_freq + offset_freq
         i = 0
-        nPairs = 0
+        n_pairs = 0
 
         for t in peaks_times:
             f = peaks_frequencies[i]
-            if (t > start_time and t < start_time + delta_time and
-                    f > start_freq and f < start_freq + delta_freq and
-                    nPairs < fan_out):
-                hash_dict[hash((anchor_freq[0], f[0],
-                t[0] - anchor_time[0]))] = anchor_time[0]
-                nPairs += 1
-            else:
-                break
-            i += 1    
+            if (t > start_time and t < start_time + delta_time and            
+                f > start_freq and f < start_freq + delta_freq):
+                if n_pairs < fan_out:
+                    hash_dict[hash((anchor_freq[0], f[0], t[0] -
+                                    anchor_time[0]))] = anchor_time[0]
+                    n_pairs += 1
+                else:
+                    break
+            i += 1  
 
     start = time.time()
     hash_dict = dict()
@@ -169,10 +169,10 @@ def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies):
     axes.yaxis.set_label_text("Frequency [Hz]")
     axes.xaxis.set_label_text("Time [s]")
     plt.title('Constellation Map')
-    plt.savefig('Constellation.jpg')
+    plt.savefig('Constellation_map.jpg')
 
 
-def plot_matching_hash_locations(fingerprints_track, fingerprints_recording):
+def plot_matching_hash_locations(matching_times_track, matching_times__recording):
 
     '''plot_matching_hash_locations
 
@@ -184,14 +184,14 @@ def plot_matching_hash_locations(fingerprints_track, fingerprints_recording):
     fig, ax = plt.subplots(figsize=(20,10))
     axes = plt.gca()
 
-    axes.scatter(fingerprints_track, fingerprints_recording, s=100, 
+    axes.scatter(matching_times_track, matching_times__recording, s=100, 
         facecolors="None", edgecolor='red')  
 
     plt.title('Scatterplot of matching hash locations')
     plt.xlabel('Track time [s]')
     plt.ylabel('Sample time [s]')
     plt.grid()
-    plt.show()
+    plt.savefig('Matching_hash_locations.jpg')
 
 
 def plot_histogram_time_offsets_differences(time_offset_differences):
@@ -204,7 +204,7 @@ def plot_histogram_time_offsets_differences(time_offset_differences):
 
     fig, ax = plt.subplots(figsize=(20,10))
     plt.hist(time_offset_differences)
-    plt.show()
+    plt.savefig('Histogram_time_offsets_differences.jpg')
 
 
 if __name__ == '__main__':
