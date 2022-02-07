@@ -30,7 +30,7 @@ if __name__ == '__main__':
     import time
 
     dir = '../resources/'
-    track_file = 'Coldplay-VioletHill.wav'
+    track_file = 'Coldplay-VioletHill.wav' # 'Elliott Smith-AFondFarewell.wav' # 
     sample_file = 'Sample.wav'
 
     start = time.time()  
@@ -46,3 +46,5 @@ if __name__ == '__main__':
     print(f'Score: {score}')
     
     print(f'compute_track_score took: {end - start} s') 
+
+    print(len(fingerprints_sample))

@@ -5,7 +5,16 @@ import matplotlib.pyplot as plt
 import librosa.display
 from matplotlib.ticker import ScalarFormatter
 from skimage.feature import peak_local_max
+import os
 
+
+def convert_mp3_to_wav():
+
+    print(os.getcwd())
+    os.chdir('../resources/database')
+    os.system('for %i in (*.mp3) do ffmpeg -i "%i" "%~ni.wav"')
+    os.chdir('../../shazir')
+    
 
 def process_audio_file(audio_file, frame_size, hop_size):
 
@@ -71,8 +80,8 @@ def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
     return peaks_times, peaks_frequencies
 
 
-def make_combinatorial_hashes(peaks_times, peaks_frequencies, offset_time,
-    offset_freq, delta_time, delta_freq):
+def make_combinatorial_hashes(peaks_times, peaks_frequencies,
+    offset_time, offset_freq, delta_time, delta_freq, fan_out):
 
     '''create_hashes processes the spectogram peaks into the audio
     hashes.
@@ -102,22 +111,43 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies, offset_time,
             if (t > start_time and t < start_time + delta_time and            
                 f > start_freq and f < start_freq + delta_freq):
                 if n_pairs < fan_out:
-                    hash_dict[hash((anchor_freq[0], f[0], t[0] -
-                                    anchor_time[0]))] = anchor_time[0]
+                    fingerprints_dict[hash((anchor_freq[0], f[0], t[0] -
+                        anchor_time[0]))] = anchor_time[0]
                     n_pairs += 1
                 else:
                     break
-            i += 1  
+            i += 1 
+        
+        # for t in peaks_times:
+        #     f = peaks_frequencies[i]
+        #     if (t > start_time and t < start_time + delta_time and            
+        #         f > start_freq and f < start_freq + delta_freq):
+        #         if n_pairs < fan_out:
+        #             if not is_sample:
+        #                 try:
+        #                     fingerprints_db[hash((anchor_freq[0], f[0], t[0] -
+        #                                 anchor_time[0]))][track_id] = anchor_time[0]
+        #                 except:
+        #                     fingerprints_db[hash((anchor_freq[0], f[0], t[0] -
+        #                                 anchor_time[0]))] = {track_id: anchor_time[0]}
+        #             else:
+        #                 fingerprints_db[hash((anchor_freq[0], f[0], t[0] -
+        #                                 anchor_time[0]))] = anchor_time[0]
+        #             n_pairs += 1
+        #         else:
+        #             break
+        #     i += 1 
+            
+    fingerprints_dict = dict()
 
     start = time.time()
-    hash_dict = dict()
     fan_out = 10
     for anchor_time, anchor_freq in zip(peaks_times, peaks_frequencies):
         pairs_from_anchor_point(anchor_time, anchor_freq)
     end = time.time()
     print(f'make_combinatorial_hashes took {end - start} s') 
-	
-    return hash_dict       
+
+    return fingerprints_dict       
 
 
 def plot_spectrogram(times, frequencies, amplitudes):

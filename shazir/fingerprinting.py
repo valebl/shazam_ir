@@ -27,10 +27,31 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
     peaks_times, peaks_frequencies = make_peaks_constellation(times,
         frequencies, amplitudes, amp_thresh)
     
-    fingerprint_hashes = make_combinatorial_hashes(peaks_times,
-        peaks_frequencies, offset_time, offset_freq, delta_time, delta_freq)
+    fingerprints_dict = make_combinatorial_hashes(peaks_times,
+        peaks_frequencies, offset_time, offset_freq, delta_time, delta_freq,
+        fan_out)
     
-    return fingerprint_hashes
+    return fingerprints_dict
+
+
+def fingerprint_track_and_add_to_database(track_file, track_id,
+    fingerprints_db):
+
+    fingerprints_dict = make_fingerprint(track_file)
+
+    for h in fingerprints_dict.keys():
+        try:
+            fingerprints_db[h][track_id] = fingerprints_dict[h]
+        except:
+            fingerprints_db[h] = {track_id: fingerprints_dict[h]}
+
+
+def fingerprint_recording(recording_file):
+
+    fingerprints_dict = make_fingerprint(recording_file)
+
+    return fingerprints_dict
+
 
 
 if __name__ == '__main__':
