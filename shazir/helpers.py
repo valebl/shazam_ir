@@ -11,9 +11,9 @@ import os
 def convert_mp3_to_wav():
 
     print(os.getcwd())
-    os.chdir('../resources/database')
+    os.chdir('../resources/database/mp3')
     os.system('for %i in (*.mp3) do ffmpeg -i "%i" "%~ni.wav"')
-    os.chdir('../../shazir')
+    os.chdir('../../../shazir')
     
 
 def process_audio_file(audio_file, frame_size, hop_size):
@@ -39,13 +39,14 @@ def process_audio_file(audio_file, frame_size, hop_size):
         hop_length=hop_size)  # Short-Time Fourier-Transform
     y_audio = np.abs(audio_stft)**2
     y_log_audio = librosa.power_to_db(y_audio)  # Decibel
+    y_log_audio_norm = y_log_audio / y_log_audio.max()
     times = librosa.frames_to_time(np.arange(y_log_audio.shape[1]),
         sr=sample_rate, hop_length=hop_size)
     frequencies = librosa.fft_frequencies(sr=sample_rate, n_fft=frame_size)
     end = time.time()
     print(f'process_audio_file took {end - start} s')
 
-    return times, frequencies, y_log_audio
+    return times, frequencies, y_log_audio_norm
 
 
 def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
@@ -102,7 +103,7 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies,
     def pairs_from_anchor_point(anchor_time, anchor_freq):
 
         start_time = anchor_time + offset_time
-        start_freq = anchor_freq + offset_freq
+        start_freq = anchor_freq - offset_freq
         i = 0
         n_pairs = 0
 
@@ -111,33 +112,13 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies,
             if (t > start_time and t < start_time + delta_time and            
                 f > start_freq and f < start_freq + delta_freq):
                 if n_pairs < fan_out:
-                    fingerprints_dict[hash((anchor_freq[0], f[0], t[0] -
-                        anchor_time[0]))] = anchor_time[0]
+                    fingerprints_dict[str(hash((anchor_freq[0], f[0], t[0] -
+                        anchor_time[0])))] = anchor_time[0]
                     n_pairs += 1
                 else:
                     break
             i += 1 
-        
-        # for t in peaks_times:
-        #     f = peaks_frequencies[i]
-        #     if (t > start_time and t < start_time + delta_time and            
-        #         f > start_freq and f < start_freq + delta_freq):
-        #         if n_pairs < fan_out:
-        #             if not is_sample:
-        #                 try:
-        #                     fingerprints_db[hash((anchor_freq[0], f[0], t[0] -
-        #                                 anchor_time[0]))][track_id] = anchor_time[0]
-        #                 except:
-        #                     fingerprints_db[hash((anchor_freq[0], f[0], t[0] -
-        #                                 anchor_time[0]))] = {track_id: anchor_time[0]}
-        #             else:
-        #                 fingerprints_db[hash((anchor_freq[0], f[0], t[0] -
-        #                                 anchor_time[0]))] = anchor_time[0]
-        #             n_pairs += 1
-        #         else:
-        #             break
-        #     i += 1 
-            
+
     fingerprints_dict = dict()
 
     start = time.time()
@@ -239,11 +220,11 @@ def plot_histogram_time_offsets_differences(time_offset_differences):
 
 if __name__ == '__main__':
 
-    dir = '../resources/'
-    audio_file = 'Coldplay-VioletHill.wav'
+    dir = '../resources/database/wav/'
+    audio_file = 'Coldplay_Violet-Hill.wav'
     FRAME_SIZE = 2048
     HOP_SIZE = 512
-    AMP_THRES = 35
+    AMP_THRES = 0.8
 
     times, frequencies, y_log_audio = process_audio_file(dir+audio_file,
         FRAME_SIZE, HOP_SIZE)

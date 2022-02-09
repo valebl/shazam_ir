@@ -1,10 +1,10 @@
 import numpy as np
 
-def searching_matching_track(hash_database, fingerprints_recording):
+def searching_matching_track(hash_database, metadata_db, fingerprints_recording):
     
     time_offset_dict = dict()
     track_ids = set()
-    match = 'No match'
+    match = None
     max_score = 0
 
     for k in fingerprints_recording.keys():
@@ -22,6 +22,10 @@ def searching_matching_track(hash_database, fingerprints_recording):
             match = track_id
             max_score = track_score
     
-    print(f'{match} with score {max_score}')
+    if match is None:
+        print('No match, sorry :(')
+    else:
+        title = metadata_db.loc[int(match)]['title']
+        print(f'The song is {title} (score = {max_score})')
     
     

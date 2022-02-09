@@ -1,8 +1,8 @@
 from helpers import process_audio_file, make_peaks_constellation, make_combinatorial_hashes
 
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
-    amp_thresh = 35, offset_time = 1, offset_freq = 10, delta_time = 10,
-    delta_freq = 100, fan_out = 10):
+    amp_thresh = 0.8, offset_time = 1, offset_freq = 500, delta_time = 10,
+    delta_freq = 1000, fan_out = 10):
 
     '''make_fingerprint
 
@@ -46,9 +46,10 @@ def fingerprint_track_and_add_to_database(track_file, track_id,
             fingerprints_db[h] = {track_id: fingerprints_dict[h]}
 
 
-def fingerprint_recording(recording_file):
+def fingerprint_recording(recording_file, amp_thresh=35):
 
-    fingerprints_dict = make_fingerprint(recording_file)
+    fingerprints_dict = make_fingerprint(recording_file,
+        amp_thresh=amp_thresh)
 
     return fingerprints_dict
 
