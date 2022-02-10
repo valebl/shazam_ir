@@ -15,11 +15,15 @@ def create_new_database():
 
     for track_file in os.listdir():
 
-        track_id = str(len(metadata_db.index))
-        metadata_db.loc[track_id] = [track_id, track_file]
-        
-        fingerprint_track_and_add_to_database(track_file, track_id,
-            fingerprints_dict)
+        try:
+            track_id = str(len(metadata_db.index))
+            metadata_db.loc[track_id] = [track_id, track_file]
+            
+            fingerprint_track_and_add_to_database(track_file, track_id,
+                fingerprints_dict)
+        except:
+            print(f'Skipping track: {track_file}')
+            continue
     
     os.chdir('..')
     json.dump(fingerprints_dict, open( "fingerprints_dict.json", 'w' ) )

@@ -1,4 +1,4 @@
-from helpers import process_audio_file, make_peaks_constellation, make_combinatorial_hashes
+from helpers import process_audio_file, make_peaks_constellation, make_combinatorial_hashes, plot_matching_hash_locations
 
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
     amp_thresh = 0.8, offset_time = 1, offset_freq = 500, delta_time = 10,
@@ -59,11 +59,20 @@ if __name__ == '__main__':
 
     import time
 
-    dir = '../resources/'
-    audio_file = 'Coldplay-VioletHill.wav'
+    dir = '../resources/database/wav/'
+    audio_file = 'Milky-Chance_Stolen-Dance.wav'
+    recording_file = 'recording.wav'
 
     time_start = time.time()
     fingerprints = make_fingerprint(dir + audio_file)
     time_end = time.time()
 
-    print(f'Running time: {time_end - time_start} s') 
+    print(f'Fingerprinting track took {time_end - time_start} s') 
+
+    time_start = time.time()
+    fingerprints_recording = make_fingerprint(recording_file)
+    time_end = time.time()
+
+    print(f'Fingerprinting recording took {time_end - time_start} s') 
+
+    plot_matching_hash_locations(fingerprints, fingerprints_recording)
