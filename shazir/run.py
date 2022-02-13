@@ -23,3 +23,5 @@ if __name__ == '__main__':
         amp_thresh=AMP_THRES)
 
     searching_matching_track(fingerprints_db, metadata_db, fingerprints_recording)
+
+    

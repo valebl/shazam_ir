@@ -10,6 +10,10 @@ import os
 
 def convert_mp3_to_wav():
 
+    '''convert_mp3_to_wav simple function to convert all mp3 files
+    into wav files (for Windows operating system)    
+    '''
+
     print(os.getcwd())
     os.chdir('../resources/database/mp3')
     os.system('for %i in (*.mp3) do ffmpeg -i "%i" "%~ni.wav"')
@@ -19,18 +23,18 @@ def convert_mp3_to_wav():
 def process_audio_file(audio_file, frame_size, hop_size):
 
     '''process_audio_file takes a .wav audio file and returns the
-    parameters defining its spectrogram, calculated using the library librosa.
+    parameters defining its spectrogram, calculated using the librosa library.
 
     Args:
         audio_file: audio track in .wav format
         frame_size: number of samples in the time frame - should be a
             power of two
-        op_size: number of time samples in between successive frames - should
+        hop_size: number of time samples in between successive frames - should
             be a power of two
     
     Returns:
-        A tuple consisting of an array of time samples in s, an array of the
-        frequency samples in Hz and a 2D array of the amplitude in dB.
+        A tuple consisting of an array of time samples [s], an array of the
+        frequency samples [Hz] and a 2D array of the amplitude [dB].
     '''
 
     print(f'Processing track: {audio_file}')
@@ -85,20 +89,25 @@ def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
 def make_combinatorial_hashes(peaks_times, peaks_frequencies,
     offset_time, offset_freq, delta_time, delta_freq, fan_out):
 
-    '''create_hashes processes the spectogram peaks into the audio
-    hashes.
+    '''make_combinatorial_hashes processes the spectogram peaks into
+    the audio hashes.
 
     Args:
-        peaks_times: 
-        peaks_frequencies:
-        offset_time:
-        offset_frequency
-        delta_time:
-        delta_freq:
+        peaks_times: time values for the peaks
+        peaks_frequencies: frequency values for the peaks
+        offset_time: minimum time distance from the anchor point time value
+            for a peak to be a possible pair 
+        offset_frequency: minimum frequency distance from the anchor point
+            frequency value for a peak to be a possible pair 
+        delta_time: determines the maximum time value for a peak to be a
+            possible pair
+        delta_freq: determines the maximum frequency value for a peak to be
+            a possible pair
     
     Returns:
-        Returns a dictionary where hashes are the keys and the time
-        offset is the associated value.
+        Returns a dictionary where hashes are the keys and the value is
+        another dictionary where the track_id is the key and the time offset
+        is the value
     '''
 
     def _pairs_from_anchor_point(anchor_time, anchor_freq):
@@ -167,12 +176,13 @@ def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
     track_name = None):
 
     '''plot_peaks_constellation plots the constallation map for the
-        spectrogram peaks.
+    spectrogram peaks.
 
     Args:
         frequencies: array containing the frequency samples
         peaks_times: time values for the peaks
         peaks_frequencies: frequency values for the peaks
+        track_name: name of the track (optional)
     '''
 
     fig, ax = plt.subplots(figsize=(25,10))
@@ -195,6 +205,40 @@ def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
 
 def plot_matching_hash_locations(fingerprints_track, fing_rec):
 
+    '''plot_matching_hash_locations creates a scatterplot of the peaks
+    time offsets with respect to the beginning of the audio, considering
+    the track and the recording; additionally it creates a histogram with
+    the differences of time offsets between the track and the recording
+
+    Args:
+        fingerprints_track: dictionary containing the track fingerprints
+        fingerprints_recording: dictionary containing the recording
+            fingerprints
+
+    Returns:
+        The score for the track
+    '''
+
+    def _plot_hash_locations(matching_times_track, matching_times__recording):
+    
+        fig, ax = plt.subplots(figsize=(20,10))
+        axes = plt.gca()
+
+        axes.scatter(matching_times_track, matching_times__recording, s=100, 
+            facecolors="None", edgecolor='red')  
+
+        plt.title('Scatterplot of matching hash locations')
+        plt.xlabel('Track time [s]')
+        plt.ylabel('Sample time [s]')
+        plt.grid()
+        plt.savefig('Matching_hash_locations.jpg')
+    
+    def _plot_histogram_time_offsets_differences(time_offset_differences):
+
+        fig, ax = plt.subplots(figsize=(20,10))
+        plt.hist(time_offset_differences)
+        plt.savefig('Histogram_time_offsets_differences.jpg')
+
     matches = []
 
     [matches.append([fingerprints_track[k], fing_rec[k], fingerprints_track[k] -
@@ -206,40 +250,6 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec):
     
     return max(np.histogram([m[2] for m in matches], bins='auto')[0])
 
-
-def _plot_hash_locations(matching_times_track, matching_times__recording):
-
-    '''plot_hash_locations
-
-    Args:
-        fingerprints_track:
-        fingerprints_recording:
-    '''
-    
-    fig, ax = plt.subplots(figsize=(20,10))
-    axes = plt.gca()
-
-    axes.scatter(matching_times_track, matching_times__recording, s=100, 
-        facecolors="None", edgecolor='red')  
-
-    plt.title('Scatterplot of matching hash locations')
-    plt.xlabel('Track time [s]')
-    plt.ylabel('Sample time [s]')
-    plt.grid()
-    plt.savefig('Matching_hash_locations.jpg')
-
-
-def _plot_histogram_time_offsets_differences(time_offset_differences):
-
-    '''plot_histogram_time_offsets_differences
-    
-    Args:
-        time_offset_differences:
-    '''
-
-    fig, ax = plt.subplots(figsize=(20,10))
-    plt.hist(time_offset_differences)
-    plt.savefig('Histogram_time_offsets_differences.jpg')
 
 
 if __name__ == '__main__':

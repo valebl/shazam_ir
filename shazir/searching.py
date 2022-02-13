@@ -1,6 +1,14 @@
 import numpy as np
 
 def searching_matching_track(hash_database, metadata_db, fingerprints_recording):
+
+    '''searching_matching_track
+    
+    Args:
+        hash_database:
+        metadata_db: 
+        fingerprints_recording:
+    '''
     
     time_offset_dict = dict()
     track_ids = set()

@@ -37,6 +37,15 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
 def fingerprint_track_and_add_to_database(track_file, track_id,
     fingerprints_db):
 
+    '''fingerprint_track_and_add_to_database takes a track, processes
+    it and adds the fingerprints to the database
+
+    Args:
+        track_file: 
+        track_id: 
+        fingerprints_db: 
+    '''
+
     fingerprints_dict = make_fingerprint(track_file)
 
     for h in fingerprints_dict.keys():
