@@ -1,4 +1,5 @@
 import json
+import sys
 import pandas as pd
 
 from recorder import Recorder
@@ -14,10 +15,12 @@ if __name__ == '__main__':
     
     metadata_db = pd.read_csv('../resources/database/metadata_db.csv')
 
-    recorder = Recorder()
-    recorder.record()
-
-    recording_file = 'recording.wav'
+    if len(sys.argv) == 2 and str(sys.argv[1]).endswith('.wav'):
+        recording_file = str(sys.argv[1])
+    else:
+        recorder = Recorder()
+        recorder.record()
+        recording_file = 'recording.wav'
 
     fingerprints_recording = fingerprint_recording(recording_file,
         amp_thresh=AMP_THRES)
