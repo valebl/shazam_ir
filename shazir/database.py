@@ -3,7 +3,7 @@ import pandas as pd
 import json
 import time
 
-from fingerprinting import fingerprint_track_and_add_to_database
+from fingerprints import fingerprint_track_and_add_to_database
 
 def create_new_database():
 

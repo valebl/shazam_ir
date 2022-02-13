@@ -1,5 +1,6 @@
+import numpy as np
 from skimage.feature import peak_local_max
-from helpers import process_audio_file
+from preprocess import process_audio_file
 
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
     amp_thresh = 0.8, offset_time = 1, offset_freq = 500, delta_time = 10,

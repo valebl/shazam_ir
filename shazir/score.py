@@ -1,5 +1,5 @@
 import numpy as np
-from helpers import plot_matching_hash_locations, plot_histogram_time_offsets_differences
+from plots import plot_matching_hash_locations, plot_histogram_time_offsets_differences
 
 def compute_track_score(fingerprints_track, fingerprints_recording):
 
@@ -24,27 +24,27 @@ def compute_track_score_with_plots(fingerprints_track, fingerprints_recording):
     
     return max(np.histogram([m[2] for m in matches], bins='auto')[0])
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
 
-    from fingerprinting import make_fingerprint
-    import time
+#     from fingerprints import make_fingerprint
+#     import time
 
-    dir = '../resources/'
-    track_file = 'Coldplay-VioletHill.wav' # 'Elliott Smith-AFondFarewell.wav' # 
-    sample_file = 'Sample.wav'
+#     dir = '../resources/'
+#     track_file = 'Coldplay-VioletHill.wav' # 'Elliott Smith-AFondFarewell.wav' # 
+#     sample_file = 'Sample.wav'
 
-    start = time.time()  
-    fingerprints_track = make_fingerprint(dir + track_file)
-    end = time.time()
-    print(f'make_fingerprint on track took: {end - start} s') 
+#     start = time.time()  
+#     fingerprints_track = make_fingerprint(dir + track_file)
+#     end = time.time()
+#     print(f'make_fingerprint on track took: {end - start} s') 
 
-    fingerprints_sample = make_fingerprint(dir + sample_file)
+#     fingerprints_sample = make_fingerprint(dir + sample_file)
 
-    start = time.time()
-    score = compute_track_score_with_plots(fingerprints_track, fingerprints_sample)
-    end = time.time()
-    print(f'Score: {score}')
+#     start = time.time()
+#     score = compute_track_score_with_plots(fingerprints_track, fingerprints_sample)
+#     end = time.time()
+#     print(f'Score: {score}')
     
-    print(f'compute_track_score took: {end - start} s') 
+#     print(f'compute_track_score took: {end - start} s') 
 
-    print(len(fingerprints_sample))
+#     print(len(fingerprints_sample))

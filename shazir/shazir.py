@@ -2,8 +2,8 @@ import json
 import pandas as pd
 
 from recorder import Recorder
-from fingerprinting import fingerprint_recording
-from searching import searching_matching_track
+from fingerprints import fingerprint_recording
+from search import searching_matching_track
 
 if __name__ == '__main__':
 
