@@ -17,7 +17,7 @@ if __name__ == '__main__':
     recorder = Recorder()
     recorder.record()
 
-    recording_file = 'recording.wav' # '../Sample.wav'  # '../resources/Sample.wav' # 
+    recording_file = 'recording.wav'
 
     fingerprints_recording = fingerprint_recording(recording_file,
         amp_thresh=AMP_THRES)
