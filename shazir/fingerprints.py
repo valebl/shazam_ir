@@ -45,8 +45,8 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
     return fingerprints_dict
 
 
-def fingerprint_track_and_add_to_database(track_file, track_id,
-    fingerprints_db):
+def fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
+    metadata_db):
 
     '''fingerprint_track_and_add_to_database: takes a track, processes
     it and adds the fingerprints to the database, which is a dictionary
@@ -54,26 +54,29 @@ def fingerprint_track_and_add_to_database(track_file, track_id,
     the track_id is the key and the time offset is the value
 
     Args:
-        track_file: 
-        track_id: 
-        fingerprints_db: 
+        track_file: audio file in .wav
+        track_id: audio file in .wav
+        fingerprints_dict: 
     '''
 
-    fingerprints_dict = make_fingerprint(track_file)
+    fingerprints_track = make_fingerprint(track_file)
 
-    for h in fingerprints_dict.keys():
+    track_id = str(len(metadata_db.index))
+    metadata_db.loc[track_id] = [track_id, track_file]
+
+    for h in fingerprints_track.keys():
         try:
-            fingerprints_db[h][track_id] = fingerprints_dict[h]
+            fingerprints_dict[h][track_id] = fingerprints_track[h]
         except:
-            fingerprints_db[h] = {track_id: fingerprints_dict[h]}
+            fingerprints_dict[h] = {track_id: fingerprints_track[h]}
 
 
 def fingerprint_recording(recording_file, amp_thresh=35):
 
-    fingerprints_dict = make_fingerprint(recording_file,
+    fingerprints_recording = make_fingerprint(recording_file,
         amp_thresh=amp_thresh)
 
-    return fingerprints_dict
+    return fingerprints_recording
 
 
 ### Helper functions in the following

@@ -21,7 +21,7 @@ def convert_mp3_to_wav():
 def process_audio_file(audio_file, frame_size, hop_size):
 
     '''process_audio_file: takes a .wav audio file and returns the
-    parameters defining its spectrogram, calculated using the librosa library.
+    values defining its spectrogram, calculated using the librosa library.
 
     Args:
         audio_file: audio track in .wav format
