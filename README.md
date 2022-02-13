@@ -2,7 +2,7 @@ Shazir
 ============
 *Valentina Blasone*
 
-This repository contains a simple implementation of the Shazam algorithm from the original paper of 2003 ([Wang et al. 2003](https://www.researchgate.net/publication/220723446_An_Industrial_Strength_Audio_Search_Algorithm)).
+This repository contains a simple implementation of the Shazam algorithm from the original paper of 2003 ([Wang et al. 2003](https://www.researchgate.net/publication/220723446_An_Industrial_Strength_Audio_Search_Algorithm)). The project is part of the Information Retrieval course of DSSC @ University of Trieste.
 
 Instructions
 ------------
@@ -66,4 +66,19 @@ shazir
     |   shazir.py
     
 ```
+
+The `resources/` folder contains two examples of audio samples, `Sample_trimmed.wav` is an audio sample obtained by trimming a part of the song "Coldplay_Violet-Hill.wav",
+while `Sample_recorded.wav` is an audio sample obtained by recording with the laptop microphone a part of the song "Ed-Sheeran_Thinking-Out-Loud.wav", which was being played  from a mobile phone.
+
+The `resources/database/` folder contains the fingerprints dictionary as a .json file, together with the related metadata database as a .csv file. These files have been obtained "offline" by a preprocessing step. The user can create its own tracks fingerprints and metadata databases by using the script `shazir/database.py`. The script will preprocess all the songs contained in the folder `resources/database/wav/`
+
+The `shazir/` folder contains all the python scripts necessary for the program to work:
+
+- `preprocess.py`: functionalities to preprocess audio files and to extract the values defining the spectrogram 
+- `fingerprints.py`: functionalities to perform audio fingerprinting, through peaks identification and combinatorial hashing, but also to fingerprint and add a new track to a given database
+- `score.py`: functionalities to assign scores to a track against the audio sample
+- `recorder.py`: functionalities to perform the match search against the sample
+- `plots.py`: functionalities to plot the spectrogram (given times, frequencies, amplitudes), the peaks constellation (given frequencies, peaks times, peaks frequencies) and the track-sample matching scatterplot and histogram (given track and sample fingerprints)
+- `database.py`: runnable file, to build the tracks databases (see above)
+- `search.py`: runnable file, to actually run the program (see above)
 
