@@ -4,21 +4,30 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
     amp_thresh = 0.8, offset_time = 1, offset_freq = 500, delta_time = 10,
     delta_freq = 1000, fan_out = 10):
 
-    '''make_fingerprint
+    '''make_fingerprint: takes in imput an audio file in .wav and performs
+    the fingerprinting on it
 
     Args:
-        audio_file: 
-        frame_size: 
-        hop_size:
-        amp_thresh: 
-        offset_time:
-        offset_freq:
-        delta_time:
-        delta_freq:
-        fan_out:
+        audio_file: audio file in .wav
+        frame_size: number of samples in the time frame - should be a
+            power of two
+        hop_size: number of time samples in between successive frames - should
+            be a power of two
+        amp_thresh: minimum amplitude value for a point to be considered
+            a candidate peak
+        offset_time: minimum time distance from the anchor point time value
+            for a peak to be a possible pair 
+        offset_frequency: minimum frequency distance from the anchor point
+            frequency value for a peak to be a possible pair 
+        delta_time: determines the maximum time value for a peak to be a
+            possible pair
+        delta_freq: determines the maximum frequency value for a peak to be
+            a possible pair
+        fan_out: maximum number of pairs for each peak in the combinatorial
+            hashing
 
     Returns:
-
+        A dictionary representing the fingerprints database
     '''
     
     times, frequencies, amplitudes = process_audio_file(audio_file,
@@ -37,7 +46,7 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
 def fingerprint_track_and_add_to_database(track_file, track_id,
     fingerprints_db):
 
-    '''fingerprint_track_and_add_to_database takes a track, processes
+    '''fingerprint_track_and_add_to_database: takes a track, processes
     it and adds the fingerprints to the database
 
     Args:

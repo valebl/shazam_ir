@@ -10,7 +10,7 @@ import os
 
 def convert_mp3_to_wav():
 
-    '''convert_mp3_to_wav simple function to convert all mp3 files
+    '''convert_mp3_to_wav: simple function to convert all mp3 files
     into wav files (for Windows operating system)    
     '''
 
@@ -22,7 +22,7 @@ def convert_mp3_to_wav():
 
 def process_audio_file(audio_file, frame_size, hop_size):
 
-    '''process_audio_file takes a .wav audio file and returns the
+    '''process_audio_file: takes a .wav audio file and returns the
     parameters defining its spectrogram, calculated using the librosa library.
 
     Args:
@@ -56,7 +56,7 @@ def process_audio_file(audio_file, frame_size, hop_size):
 
 def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
 
-    '''make_peaks_constellation identifies peaks in the spectrogram. Peaks are
+    '''make_peaks_constellation: identifies peaks in the spectrogram. Peaks are
     time-frequency points that have higher energy content then all
     their neighbours. An minimum amplitude threshold is also considered.
 
@@ -89,7 +89,7 @@ def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
 def make_combinatorial_hashes(peaks_times, peaks_frequencies,
     offset_time, offset_freq, delta_time, delta_freq, fan_out):
 
-    '''make_combinatorial_hashes processes the spectogram peaks into
+    '''make_combinatorial_hashes: processes the spectogram peaks into
     the audio hashes.
 
     Args:
@@ -143,7 +143,7 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies,
 
 def plot_spectrogram(times, frequencies, amplitudes, track_name = None):
 
-    '''plot_spectrogram plots the spectrogram.
+    '''plot_spectrogram: plots the spectrogram.
 
     Args:
         times: array containing the time samples
@@ -175,7 +175,7 @@ def plot_spectrogram(times, frequencies, amplitudes, track_name = None):
 def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
     track_name = None):
 
-    '''plot_peaks_constellation plots the constallation map for the
+    '''plot_peaks_constellation: plots the constallation map for the
     spectrogram peaks.
 
     Args:
@@ -205,7 +205,7 @@ def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
 
 def plot_matching_hash_locations(fingerprints_track, fing_rec):
 
-    '''plot_matching_hash_locations creates a scatterplot of the peaks
+    '''plot_matching_hash_locations: creates a scatterplot of the peaks
     time offsets with respect to the beginning of the audio, considering
     the track and the recording; additionally it creates a histogram with
     the differences of time offsets between the track and the recording

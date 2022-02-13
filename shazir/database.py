@@ -8,7 +8,7 @@ from fingerprinting import fingerprint_track_and_add_to_database
 def create_new_database():
 
     '''
-    create_new_database creates a database from scratch by looping
+    create_new_database: creates a database from scratch by looping
     over the tracks, processing, fingerprinting and adding each of them;
     the database is implemented by a dictionary of dictionaries; additionally
     it creates a database of metadata for the tracks, implemented by a pandas
