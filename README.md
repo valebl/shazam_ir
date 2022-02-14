@@ -67,6 +67,9 @@ shazir
 |
 └───examples
 |   |   matching_vs_non-matching_plots.ipynb
+|   |   sample_trimmed.wav
+|   |   matching_track.wav
+|   |   non-matching_track.wav
     
 ```
 
