@@ -46,7 +46,7 @@ What's inside the repository
 
 ```
 shazir  
-│
+|
 └───resources
 │   │   Sample_trimmmed.wav
 |   |   Sample_recorded.wav
@@ -56,14 +56,17 @@ shazir
 │       │   metadata_db.csv
 │   
 └───shazir
-    │   database.py
-    │   fingerprints.py
-    |   plots.py
-    |   preprocess.py
-    |   recorder.py
-    |   score.py
-    |   search.py
-    |   shazir.py
+|   │   database.py
+|   │   fingerprints.py
+|   |   plots.py
+|   |   preprocess.py
+|   |   recorder.py
+|   |   score.py
+|   |   search.py
+|   |   shazir.py
+|
+└───examples
+|   |   matching_vs_non-matching_plots.ipynb
     
 ```
 
@@ -81,4 +84,6 @@ The `shazir/` folder contains all the python scripts necessary for the program t
 - `plots.py`: functionalities to plot the spectrogram (given times, frequencies, amplitudes), the peaks constellation (given frequencies, peaks times, peaks frequencies) and the track-sample matching scatterplot and histogram (given track and sample fingerprints)
 - `database.py`: runnable file, to build the tracks databases (see above)
 - `search.py`: runnable file, to actually run the program (see above)
+
+The `examples` folder contains a jupyter notebook, which shows plot from the different stages of the algorithm for a matching and non-matching track. From this examples we can see how the plots resamble the results in ([Wang et al. 2003](https://www.researchgate.net/publication/220723446_An_Industrial_Strength_Audio_Search_Algorithm)).
 
