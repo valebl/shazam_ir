@@ -24,11 +24,8 @@ def create_new_database():
     for track_file in os.listdir():
 
         try:
-            track_id = str(len(metadata_db.index))
-            metadata_db.loc[track_id] = [track_id, track_file]
-            
-            fingerprint_track_and_add_to_database(track_file, track_id,
-                fingerprints_dict)
+            fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
+                metadata_db)        
         except:
             print(f'Skipping track: {track_file}')
             continue

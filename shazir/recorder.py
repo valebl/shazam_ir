@@ -5,6 +5,7 @@ import pyaudio
 import tkinter
 import tkinter as tk
 import tkinter.messagebox
+import time
 
 class Recorder():
     
@@ -37,6 +38,7 @@ class Recorder():
             pady=5,
             text='Stop Recording', command=lambda: self.stop(), bg='white')
         self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
+        self.stop_rec.configure(state='disabled')
 
         tkinter.mainloop()
         
@@ -61,6 +63,7 @@ class Recorder():
         self.main.destroy()
     
     def callback(self, in_data, frame_count, time_info, flag):
+        self.stop_rec.configure(state='active')
         numpy_array = np.frombuffer(in_data, dtype=np.float32)
         librosa.feature.mfcc(numpy_array)
         try:

@@ -3,7 +3,7 @@ from skimage.feature import peak_local_max
 from preprocess import process_audio_file
 
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
-    amp_thresh = 0.8, offset_time = 1, offset_freq = 500, delta_time = 10,
+    amp_thresh = 0.6, offset_time = 1, offset_freq = 500, delta_time = 10,
     delta_freq = 1000, fan_out = 10):
 
     '''make_fingerprint: takes in imput an audio file in .wav and performs
@@ -71,7 +71,7 @@ def fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
             fingerprints_dict[h] = {track_id: fingerprints_track[h]}
 
 
-def fingerprint_recording(recording_file, amp_thresh=35):
+def fingerprint_recording(recording_file, amp_thresh=0.6):
 
     fingerprints_recording = make_fingerprint(recording_file,
         amp_thresh=amp_thresh)
@@ -81,7 +81,7 @@ def fingerprint_recording(recording_file, amp_thresh=35):
 
 ### Helper functions in the following
 
-def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh):
+def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh=0.6):
 
     '''make_peaks_constellation: identifies peaks in the spectrogram. Peaks are
     time-frequency points that have higher energy content then all
@@ -159,7 +159,6 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies,
     fingerprints_dict = dict()
 
     # start = time.time()
-    fan_out = 10
     for anchor_time, anchor_freq in zip(peaks_times, peaks_frequencies):
         _pairs_from_anchor_point(anchor_time, anchor_freq)
     # end = time.time()

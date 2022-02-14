@@ -18,7 +18,7 @@ def convert_mp3_to_wav():
     os.chdir('../../../shazir')
     
 
-def process_audio_file(audio_file, frame_size, hop_size):
+def process_audio_file(audio_file, frame_size=2048, hop_size=512):
 
     '''process_audio_file: takes a .wav audio file and returns the
     values defining its spectrogram, calculated using the librosa library.

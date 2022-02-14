@@ -3,7 +3,7 @@ import numpy as np
 import librosa
 from matplotlib.ticker import ScalarFormatter
 
-def plot_spectrogram(times, frequencies, amplitudes, track_name = None):
+def plot_spectrogram(times, frequencies, amplitudes, dir_output, track_name = None):
 
     '''plot_spectrogram: plots the spectrogram
 
@@ -13,8 +13,8 @@ def plot_spectrogram(times, frequencies, amplitudes, track_name = None):
         amplitudes: array containing the spectrogram amplitudes
             amplitudes.shape = (frequencies.shape, times.shape)
     '''
-
-    fig, ax = plt.subplots(figsize=(25,10))
+    width = int(0.1 * times[-1])
+    fig, ax = plt.subplots(figsize=(width,10))
     axes = plt.gca()
     out = axes.pcolormesh(times, frequencies, amplitudes, cmap='Greys')
     _ = axes.set_xlim(times.min(), times.max())
@@ -25,21 +25,25 @@ def plot_spectrogram(times, frequencies, amplitudes, track_name = None):
     axes.yaxis.set_major_formatter(ScalarFormatter())
     axes.yaxis.set_label_text("Frequency [Hz]")
     axes.xaxis.set_label_text("Time [s]")
-    fig.colorbar(out)
 
     if track_name is None:
         title = 'Spectrogram'
-        export_name = 'Spectrogram.jpg'
+        export_name = dir_output + 'Spectrogram.jpg'
     else:
-        f'Spectrogram of {track_name}'
-        f'Spectrogram_{track_name}.jpg'
+        title = f'Spectrogram of {track_name}'
+        export_name = dir_output + f'Spectrogram_{track_name}.jpg'
 
-    plt.title(title)    
-    plt.savefig(export_name)
+    plt.title(title)  
+
+    # fig.colorbar(out)
+    cax = fig.add_axes([ax.get_position().x1 + 0.25 / width, ax.get_position().y0, 0.3 / width ,ax.get_position().height])
+    fig.colorbar(out, cax=cax)
+
+    plt.savefig(export_name, bbox_inches='tight')
 
     
-def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
-    track_name = None):
+def plot_peaks_constellation(frequencies, times, peaks_times, peaks_frequencies,
+    dir_output, track_name = None):
 
     '''plot_peaks_constellation: plots the constallation map for the
     spectrogram peaks.
@@ -51,7 +55,8 @@ def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
         track_name: name of the track (optional)
     '''
 
-    fig, ax = plt.subplots(figsize=(25,10))
+    width = int(0.1 * times[-1])
+    fig, ax = plt.subplots(figsize=(width,10))
     axes = plt.gca()
     out = axes.scatter(peaks_times, peaks_frequencies, marker='x', s=20)
     axes.set_ylim(frequencies.min(), frequencies.max())
@@ -64,17 +69,17 @@ def plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
 
     if track_name is None:
         title = 'Constellation Map'
-        export_name = 'Constellation_map.jpg'
+        export_name = dir_output + 'Constellation_map.jpg'
     else:
         title = f'Constellation Map of {track_name}'
-        f'Constellation_{track_name}.jpg'
+        export_name = dir_output + f'Constellation_{track_name}.jpg'
 
     plt.title(title)
-    plt.savefig(export_name)
+    plt.savefig(export_name, bbox_inches='tight')
 
 
 def plot_matching_hash_locations(fingerprints_track, fing_rec,
-    track_name = None):
+    dir_output, track_name = None):
 
     '''plot_matching_hash_locations: creates a scatterplot of the peaks
     time offsets with respect to the beginning of the audio, considering
@@ -104,10 +109,10 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec,
 
         if track_name is None:
             title = f'Scatterplot of matching hash locations (score: {score})'
-            export_name = 'Matching_hash_locations.jpg'
+            export_name = dir_output + 'Matching_hash_locations.jpg'
         else:
             title = f'Scatterplot of matching hash locations of {track_name} (score: {score})' 
-            export_name = f'Matching_hash_locations_{track_name}.jpg'
+            export_name = dir_output + f'Matching_hash_locations_{track_name}.jpg'
 
         plt.title(title)
         plt.savefig(export_name)
@@ -119,10 +124,13 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec,
 
         if track_name is None:
             title = f'Histogram of differences of time offsets (score = {score})'
-            export_name = 'Histogram_time_offsets_differences.jpg'
+            export_name = dir_output + 'Histogram_time_offsets_differences.jpg'
         else:
             title = f'Histogram of differences of time offsets of {track_name} (score = {score})'
-            export_name = f'Histogram_time_offsets_differences_{track_name}.jpg'
+            export_name = dir_output + f'Histogram_time_offsets_differences_{track_name}.jpg'
+        
+        plt.title(title)
+        plt.savefig(export_name)
 
     matches = []
 
