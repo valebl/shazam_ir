@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import librosa
 from matplotlib.ticker import ScalarFormatter
+from matplotlib.ticker import MaxNLocator
 
 def plot_spectrogram(times, frequencies, amplitudes, dir_output, track_name = None):
 
@@ -15,16 +16,15 @@ def plot_spectrogram(times, frequencies, amplitudes, dir_output, track_name = No
     '''
     width = int(0.1 * times[-1])
     fig, ax = plt.subplots(figsize=(width,10))
-    axes = plt.gca()
-    out = axes.pcolormesh(times, frequencies, amplitudes, cmap='Greys')
-    _ = axes.set_xlim(times.min(), times.max())
-    _ = axes.set_ylim(frequencies.min(), frequencies.max())
+    out = ax.pcolormesh(times, frequencies, amplitudes, cmap='Greys')
+    _ = ax.set_xlim(times.min(), times.max())
+    _ = ax.set_ylim(frequencies.min(), frequencies.max())
     thresh = librosa.note_to_hz("C2")  # Defines the range (-x, x), 
                                        # within which the plot is linear
-    axes.set_yscale('symlog', base=2, linthresh=thresh)
-    axes.yaxis.set_major_formatter(ScalarFormatter())
-    axes.yaxis.set_label_text("Frequency [Hz]")
-    axes.xaxis.set_label_text("Time [s]")
+    ax.set_yscale('symlog', base=2, linthresh=thresh)
+    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_label_text("Frequency [Hz]")
+    ax.xaxis.set_label_text("Time [s]")
 
     if track_name is None:
         title = 'Spectrogram'
@@ -57,15 +57,14 @@ def plot_peaks_constellation(frequencies, times, peaks_times, peaks_frequencies,
 
     width = int(0.1 * times[-1])
     fig, ax = plt.subplots(figsize=(width,10))
-    axes = plt.gca()
-    out = axes.scatter(peaks_times, peaks_frequencies, marker='x', s=20)
-    axes.set_ylim(frequencies.min(), frequencies.max())
+    out = ax.scatter(peaks_times, peaks_frequencies, marker='x', s=20)
+    ax.set_ylim(frequencies.min(), frequencies.max())
     thresh = librosa.note_to_hz("C2")  # Defines the range (-x, x)
                                        # within which the plot is linear
-    axes.set_yscale('symlog', base=2, linthresh=thresh)
-    axes.yaxis.set_major_formatter(ScalarFormatter())
-    axes.yaxis.set_label_text("Frequency [Hz]")
-    axes.xaxis.set_label_text("Time [s]")
+    ax.set_yscale('symlog', base=2, linthresh=thresh)
+    ax.yaxis.set_major_formatter(ScalarFormatter())
+    ax.yaxis.set_label_text("Frequency [Hz]")
+    ax.xaxis.set_label_text("Time [s]")
 
     if track_name is None:
         title = 'Constellation Map'
@@ -98,9 +97,8 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec,
     def _plot_hash_locations(matching_times_track, matching_times__recording, score):
     
         fig, ax = plt.subplots(figsize=(20,10))
-        axes = plt.gca()
 
-        axes.scatter(matching_times_track, matching_times__recording, s=100, 
+        ax.scatter(matching_times_track, matching_times__recording, s=100, 
             facecolors="None", edgecolor='red')  
 
         plt.xlabel('Track time [s]')
@@ -121,6 +119,7 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec,
 
         fig, ax = plt.subplots(figsize=(20,10))
         plt.hist(time_offset_differences)
+        ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
         if track_name is None:
             title = f'Histogram of differences of time offsets (score = {score})'
@@ -129,6 +128,7 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec,
             title = f'Histogram of differences of time offsets of {track_name} (score = {score})'
             export_name = dir_output + f'Histogram_time_offsets_differences_{track_name}.jpg'
         
+        plt.xlabel('Offset track time - offset sample time [s]')
         plt.title(title)
         plt.savefig(export_name)
 
