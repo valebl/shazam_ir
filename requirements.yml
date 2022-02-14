@@ -1,0 +1,14 @@
+name: prova2
+channels:
+  - conda-forge
+  - jmcmurray
+  - anaconda
+dependencies:
+  - python==3.9.9
+  - numpy==1.21.5
+  - pandas==1.4.0
+  - matplotlib
+  - librosa==0.8.1
+  - tk==8.6.11
+  - json
+  - scikit-image==0.19.1
