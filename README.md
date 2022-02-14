@@ -36,7 +36,7 @@ A dialog box will appear, allowing you to record the desired audio sample. When 
 
 Alternatively, you can run the program providing a sample file from the command line. The sample must be in .wav:
 
-    python shazir.py ../resources/Sample.wav
+    python shazir.py ../resources/sample_trimmed.wav
 
 N.B. The database consists on the fingerprints of 163 tracks. Songs not in this small database has cannot be detected.
 
