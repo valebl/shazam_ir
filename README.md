@@ -9,20 +9,20 @@ Instructions
 
 Clone the repo.
 
-    $ git clone 
-    $ cd shazir
+    git clone 
+    cd shazir
 
-Setup an isolated environment with `conda`.
+Create an isolated environment with `conda` from the `environment.yml` file provided.
 
-    $ conda create -n shazir
-    $ conda activate shazir
+    conda env create -f environment.yml
 
-Installing Packages
---------------------
+Activate the environment.
 
-Get the requirements installed in the environment.
+    conda activate shazir
 
-    $ conda install -c conda-forge --file requirements.txt
+Since PyAudio is not supported directly in Anaconda for the recent python versions, you need to install it using pip and the correct wheel. For python 3.9 64 bit the file is already provided in the repository (`PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl`), otherwise you need to look at [PyAudio](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio) and download the correct wheel. In the folder where your .whl file type:
+
+    pip install PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl 
    
 
 Run Shazir
@@ -30,13 +30,13 @@ Run Shazir
 
 Run the program by typing:
     
-    $ python shazir.py
+    python shazir.py
 
 A dialog box will appear, allowing you to record the desired audio sample. When ready to record, click on "Start recording". To stop, click on "Stop recording". The program will return you the track with the highest scory among the ones in the database. If all tracks score 0, a "no match" message will be displayed.
 
 Alternatively, you can run the program providing a sample file from the command line. The sample must be in .wav:
 
-    $ python shazir.py ../resources/Sample.wav
+    python shazir.py ../resources/Sample.wav
 
 N.B. The database consists on the fingerprints of 163 tracks. Songs not in this small database has cannot be detected.
 
