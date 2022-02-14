@@ -48,8 +48,10 @@ What's inside the repository
 shazir  
 |
 └───resources
-│   │   Sample_trimmmed.wav
-|   |   Sample_recorded.wav
+│   │   sample_trimmmed.wav
+|   |   sample_recorded.wav
+|   |   matching_track.wav
+|   |   non-matching_track.wav
 │   │
 │   └───database
 │       │   fingerprints_dict.json
@@ -67,14 +69,11 @@ shazir
 |
 └───examples
 |   |   matching_vs_non-matching_plots.ipynb
-|   |   sample_trimmed.wav
-|   |   matching_track.wav
-|   |   non-matching_track.wav
     
 ```
 
-The `resources/` folder contains two examples of audio samples, `Sample_trimmed.wav` is an audio sample obtained by trimming a part of the song "Coldplay_Violet-Hill.wav",
-while `Sample_recorded.wav` is an audio sample obtained by recording with the laptop microphone a part of the song "Ed-Sheeran_Thinking-Out-Loud.wav", which was being played  from a mobile phone.
+The `resources/` folder contains two examples of audio samples, `sample_trimmed.wav` is an audio sample obtained by trimming a part of the song "Coldplay_Violet-Hill.wav",
+while `sample_recorded.wav` is an audio sample obtained by recording with the laptop microphone a part of the song "Ed-Sheeran_Thinking-Out-Loud.wav", which was being played  from a mobile phone. Moreover, `matching_track.wav` is the complete song "Coldplay_Violet-Hill.wav" and `non-matching_track.wav` is the complete song "The-Beatles_Hey-Jude.wav". These songs are used in the examples, against the sample trimmed from "Coldplay_Violet-Hill.wav".
 
 The `resources/database/` folder contains the fingerprints dictionary as a .json file, together with the related metadata database as a .csv file. These files have been obtained "offline" by a preprocessing step. The user can create its own tracks fingerprints and metadata databases by using the script `shazir/database.py`. The script will preprocess all the songs contained in the folder `resources/database/wav/`
 
