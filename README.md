@@ -23,6 +23,8 @@ Activate the environment.
 Since PyAudio is not supported directly in Anaconda for the recent python versions, you need to install it using pip and the correct wheel. For python 3.9 64 bit the file is already provided in the repository (`PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl`), otherwise you need to look at [PyAudio](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio) and download the correct wheel. In the folder where your .whl file type:
 
     pip install PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl 
+    
+Finally you need to unzip the fingerprints database in order to have a file `shazir/resources/database/fingerprints_dict.json`.
    
 
 Run Shazir
@@ -54,7 +56,7 @@ shazir
 |   |   non-matching_track.wav
 │   │
 │   └───database
-│       │   fingerprints_dict.json
+│       │   fingerprints_dict.zip
 │       │   metadata_db.csv
 │   
 └───shazir
@@ -75,7 +77,7 @@ shazir
 The `resources/` folder contains two examples of audio samples, `sample_trimmed.wav` is an audio sample obtained by trimming a part of the song "Coldplay_Violet-Hill.wav",
 while `sample_recorded.wav` is an audio sample obtained by recording with the laptop microphone a part of the song "Ed-Sheeran_Thinking-Out-Loud.wav", which was being played  from a mobile phone. Moreover, `matching_track.wav` is the complete song "Coldplay_Violet-Hill.wav" and `non-matching_track.wav` is the complete song "The-Beatles_Hey-Jude.wav". These songs are used in the examples, against the sample trimmed from "Coldplay_Violet-Hill.wav".
 
-The `resources/database/` folder contains the fingerprints dictionary as a .json file, together with the related metadata database as a .csv file. These files have been obtained "offline" by a preprocessing step. The user can create its own tracks fingerprints and metadata databases by using the script `shazir/database.py`. The script will preprocess all the songs contained in the folder `resources/database/wav/`
+The `resources/database/` folder contains the fingerprints database as a zip folder. A specified in the instructions, you need to unzip the file to get the corresponding .json file. Moreover, the folder contains the related metadata database as a .csv file. These files have been obtained "offline" by a preprocessing step. The user can create its own tracks fingerprints and metadata databases by using the script `shazir/database.py`. The script will preprocess all the songs contained in the folder `resources/database/wav/`
 
 The `shazir/` folder contains all the python scripts necessary for the program to work:
 
