@@ -1,5 +1,7 @@
 import numpy as np
 
+MINIMUM_SCORE = 20
+
 def searching_matching_track(hash_database, metadata_db, fingerprints_recording):
 
     '''searching_matching_track
@@ -30,8 +32,8 @@ def searching_matching_track(hash_database, metadata_db, fingerprints_recording)
             match = track_id
             max_score = track_score
     
-    if match is None:
-        print('No match, sorry :(')
+    if max_score < MINIMUM_SCORE:
+        print('Scores are too low :( Try again, perhaps with a longer recording!')
     else:
         title = metadata_db.loc[int(match)]['title']
         print(f'The song is {title} (score = {max_score})')
