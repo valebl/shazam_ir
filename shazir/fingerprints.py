@@ -2,9 +2,11 @@ import numpy as np
 from skimage.feature import peak_local_max
 from preprocess import process_audio_file
 
+AMP_THRESH = 0.7
+
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
-    amp_thresh = 0.7, offset_time = 1, offset_freq = 500, delta_time = 10,
-    delta_freq = 1000, fan_out = 10):
+    amp_thresh = AMP_THRESH, offset_time = 1, offset_freq = 500, delta_time = 10,
+    delta_freq = 1000, fan_out = 15):
 
     '''make_fingerprint: takes in imput an audio file in .wav and performs
     the fingerprinting on it
@@ -71,7 +73,7 @@ def fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
             fingerprints_dict[h] = {track_id: fingerprints_track[h]}
 
 
-def fingerprint_recording(recording_file, amp_thresh=0.6):
+def fingerprint_recording(recording_file, amp_thresh = AMP_THRESH):
 
     fingerprints_recording = make_fingerprint(recording_file,
         amp_thresh=amp_thresh)

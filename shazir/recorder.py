@@ -6,6 +6,7 @@ import tkinter
 import tkinter as tk
 import tkinter.messagebox
 import time
+from tkinter import messagebox
 
 class Recorder():
     
@@ -17,7 +18,6 @@ class Recorder():
         self._frames = frames
         self._audio = None
         self._stream = None
-
         
     def record(self, name = 'recording.wav'):
         # Start Tkinter and set Title
@@ -40,9 +40,19 @@ class Recorder():
         self.stop_rec.grid(row=1, column=0, columnspan=1, padx=50, pady=5)
         self.stop_rec.configure(state='disabled')
 
+        def on_closing():
+            if messagebox.askokcancel("Quit", "Do you want to quit?"):
+                self.main.destroy()
+
+        self.main.protocol("WM_DELETE_WINDOW", on_closing)
+
         tkinter.mainloop()
         
-        sf.write(name, self._full_data, self._rate)
+        try:
+            sf.write(name, self._full_data, self._rate)
+            self.recording = 'recording.wav'
+        except:
+            print("Quitting shazir...")
         
         
     def start(self):
