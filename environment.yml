@@ -12,4 +12,3 @@ dependencies:
   - tk==8.6.11
   - json
   - scikit-image==0.19.1
-  - pip==21.3.1
