@@ -143,4 +143,4 @@ def plot_matching_hash_locations(fingerprints_track, fing_rec,
     _plot_hash_locations([m[0] for m in matches],[m[1] for m in matches], score)
     _plot_histogram_time_offsets_differences([m[2] for m in matches], score)
     
-    return 
+    return

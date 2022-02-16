@@ -8,7 +8,7 @@ from search import searching_matching_track
 
 if __name__ == '__main__':
 
-    AMP_THRES = 0.6
+    AMP_THRES = 0.7
 
     with open("../resources/database/fingerprints_dict.json") as file:
         fingerprints_db = json.load(file)

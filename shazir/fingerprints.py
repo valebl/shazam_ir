@@ -3,7 +3,7 @@ from skimage.feature import peak_local_max
 from preprocess import process_audio_file
 
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
-    amp_thresh = 0.6, offset_time = 1, offset_freq = 500, delta_time = 10,
+    amp_thresh = 0.7, offset_time = 1, offset_freq = 500, delta_time = 10,
     delta_freq = 1000, fan_out = 10):
 
     '''make_fingerprint: takes in imput an audio file in .wav and performs
