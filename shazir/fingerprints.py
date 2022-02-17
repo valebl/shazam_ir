@@ -1,15 +1,18 @@
+# import time
 import numpy as np
 from skimage.feature import peak_local_max
 from preprocess import process_audio_file
 
+
 AMP_THRESH = 0.7
+
 
 def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
     amp_thresh = AMP_THRESH, offset_time = 1, offset_freq = 500, delta_time = 10,
     delta_freq = 1000, fan_out = 15):
 
     '''make_fingerprint: takes in imput an audio file in .wav and performs
-    the fingerprinting on it
+    the fingerprinting of it.
 
     Args:
         audio_file: audio file in .wav
@@ -31,7 +34,7 @@ def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
             hashing
 
     Returns:
-        A dictionary representing the fingerprints database
+        A dictionary representing the fingerprints of the input audio.
     '''
     
     times, frequencies, amplitudes = process_audio_file(audio_file,
@@ -51,14 +54,15 @@ def fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
     metadata_db):
 
     '''fingerprint_track_and_add_to_database: takes a track, processes
-    it and adds the fingerprints to the database, which is a dictionary
-    where hashes are the keys and the value is another dictionary where
-    the track_id is the key and the time offset is the value
+    it and adds the fingerprints to the database.
 
     Args:
         track_file: audio file in .wav
-        track_id: audio file in .wav
-        fingerprints_dict: 
+        fingerprints_dict: dictionary where hashes are the keys and the value
+            is another dictionary where the track_id is the key and the time
+            offset is the value
+        metadata_db: pandas DataFrame that contains metadata information about
+            the tracks (track id and file name)
     '''
 
     fingerprints_track = make_fingerprint(track_file)
@@ -75,6 +79,18 @@ def fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
 
 def fingerprint_recording(recording_file, amp_thresh = AMP_THRESH):
 
+    '''fingerprint_recording: takes a recording file and processes it into
+    its fingerprints.
+
+    Args:
+        recording_file: .wav file to be processed
+        amp_thresh: minimum amplitude value for a point to be considered
+            a candidate peak
+
+    Returns:
+        A dictionary containing the recording fingerprints.
+    '''
+
     fingerprints_recording = make_fingerprint(recording_file,
         amp_thresh=amp_thresh)
 
@@ -82,6 +98,7 @@ def fingerprint_recording(recording_file, amp_thresh = AMP_THRESH):
 
 
 ### Helper functions in the following
+
 
 def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh=0.6):
 
@@ -92,7 +109,7 @@ def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh=0.6):
     Args:
         times: array containing the time samples
         frequencies: array containing the frequency samples
-        amplitudes = array containing the spectrogram amplitudes
+        amplitudes: array containing the spectrogram amplitudes
             amplitudes.shape = (frequencies.shape, times.shape)    
         amp_thresh: minimum amplitude value for a point to be considered
             a candidate peak
@@ -136,7 +153,7 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies,
     Returns:
         Returns a dictionary where hashes are the keys and the value is
         another dictionary where the track_id is the key and the time offset
-        is the value
+        is the value.
     '''
 
     def _pairs_from_anchor_point(anchor_time, anchor_freq):
@@ -167,27 +184,3 @@ def make_combinatorial_hashes(peaks_times, peaks_frequencies,
     # print(f'make_combinatorial_hashes took {end - start} s') 
 
     return fingerprints_dict       
-
-
-
-# if __name__ == '__main__':
-
-#     import time
-
-#     dir = '../resources/database/wav/'
-#     audio_file = 'Milky-Chance_Stolen-Dance.wav'
-#     recording_file = 'recording.wav'
-
-#     time_start = time.time()
-#     fingerprints = make_fingerprint(dir + audio_file)
-#     time_end = time.time()
-
-#     print(f'Fingerprinting track took {time_end - time_start} s') 
-
-#     time_start = time.time()
-#     fingerprints_recording = make_fingerprint(recording_file)
-#     time_end = time.time()
-
-#     print(f'Fingerprinting recording took {time_end - time_start} s') 
-
-#     plot_matching_hash_locations(fingerprints, fingerprints_recording)

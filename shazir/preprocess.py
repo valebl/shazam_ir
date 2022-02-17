@@ -1,9 +1,8 @@
-import time
+# import time
+import os
 import librosa
 import numpy as np
 import librosa.display
-
-import os
 
 
 def convert_mp3_to_wav():
@@ -51,31 +50,3 @@ def process_audio_file(audio_file, frame_size=2048, hop_size=512):
     # print(f'process_audio_file took {end - start} s')
 
     return times, frequencies, amp_log_norm
-
-
-
-
-
-# if __name__ == '__main__':
-
-#     dir = './'
-#     audio_file = 'recording.wav'
-#     # dir ='../resources/database/wav/'
-#     # audio_file = 'Milky-Chance_Stolen-Dance.wav' # 'Coldplay_Violet-Hill.wav'
-#     # audio_file = 'Foo-Fighters_Everlong.wav'
-#     FRAME_SIZE = 2048
-#     HOP_SIZE = 512
-#     AMP_THRES = 0.4
-
-#     times, frequencies, amp_log = process_audio_file(dir+audio_file,
-#         FRAME_SIZE, HOP_SIZE)
-#     print(f'file {audio_file} processed...')
-
-#     plot_spectrogram(times, frequencies, amp_log, audio_file)
-
-#     peaks_times, peaks_frequencies = make_peaks_constellation(times,
-#         frequencies, amp_log, AMP_THRES)
-#     print(f'peaks identified...')
-
-#     plot_peaks_constellation(frequencies, peaks_times, peaks_frequencies,
-#         audio_file)    

@@ -5,6 +5,7 @@ import time
 
 from fingerprints import fingerprint_track_and_add_to_database
 
+
 def create_new_database():
 
     '''
@@ -12,7 +13,7 @@ def create_new_database():
     over the tracks, processing, fingerprinting and adding each of them;
     the database is implemented by a dictionary of dictionaries; additionally
     it creates a database of metadata for the tracks, implemented by a pandas
-    dataframe
+    DataFrame.
     '''
 
     metadata_db = pd.DataFrame(columns=['track_id', 'title'])

@@ -2,12 +2,14 @@ import numpy as np
 
 MINIMUM_SCORE = 20
 
-def searching_matching_track(hash_database, metadata_db, fingerprints_recording):
+def searching_matching_track(fingerprints_dict, metadata_db, fingerprints_recording):
 
-    '''searching_matching_track
+    '''searching_matching_track: finds all matching hashes between the 
+    recording and the tracks in the database and computes the score for
+    each track, thus identifying if there is a match.
     
     Args:
-        hash_database:
+        hash_database: 
         metadata_db: 
         fingerprints_recording:
     '''
@@ -18,13 +20,13 @@ def searching_matching_track(hash_database, metadata_db, fingerprints_recording)
     max_score = 0
 
     for k in fingerprints_recording.keys():
-        if k in hash_database.keys():
-            for track_id in hash_database[k].keys():
+        if k in fingerprints_dict.keys():
+            for track_id in fingerprints_dict[k].keys():
                 track_ids.add(track_id)
                 try:
-                    time_offset_dict[track_id].append(hash_database[k][track_id] - fingerprints_recording[k])
+                    time_offset_dict[track_id].append(fingerprints_dict[k][track_id] - fingerprints_recording[k])
                 except:
-                    time_offset_dict[track_id] = [hash_database[k][track_id] - fingerprints_recording[k]]
+                    time_offset_dict[track_id] = [fingerprints_dict[k][track_id] - fingerprints_recording[k]]
                     
     for track_id in track_ids:             
         track_score = max(np.histogram(time_offset_dict[track_id], bins='sqrt')[0])
@@ -36,6 +38,6 @@ def searching_matching_track(hash_database, metadata_db, fingerprints_recording)
         print('Scores are too low :( Try again, perhaps with a longer recording!')
     else:
         title = metadata_db.loc[int(match)]['title']
-        print(f'The song is {title} (score = {max_score})')
+        print(f'The best match is {title} (score = {max_score})')
     
     

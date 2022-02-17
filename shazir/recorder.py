@@ -87,9 +87,3 @@ class Recorder():
     
     def get_recording(self):
         return self._full_data
-
-
-if __name__ == '__main__':
-
-    recorder = Recorder()
-    recorder.record()
