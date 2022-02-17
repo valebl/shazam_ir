@@ -34,7 +34,7 @@ Run the program by typing:
     
     python shazir.py
 
-A dialog box will appear, allowing you to record the desired audio sample. When ready to record, click on "Start recording". To stop, click on "Stop recording". The program will return you the track with the highest scory among the ones in the database. If all tracks score less than a minimum score (by default set as 20), a message will be displayed, asking to try recording a longer audio sample.
+A dialog box will appear, allowing you to record the desired audio sample. When ready to record, click on "Start recording". To stop, click on "Stop recording". The program will return you the track with the highest scory among the ones in the database. If all tracks score less than a minimum score (by default set as 20), a message will be displayed, asking to try recording a longer audio sample. A recording of at least 20 seconds is suggested, to have better chances of recognition.
 
 Alternatively, you can run the program providing a sample file from the command line. The sample must be in .wav:
 
