@@ -2,7 +2,7 @@ Shazir
 ============
 *Valentina Blasone*
 
-This repository contains a simple implementation of the Shazam algorithm from the original paper of 2003 ([Wang et al. 2003](https://www.researchgate.net/publication/220723446_An_Industrial_Strength_Audio_Search_Algorithm)). The project is part of the Information Retrieval course of DSSC @ University of Trieste, from this the name, shazir.
+This repository contains a simple implementation of the Shazam algorithm from the original paper of 2003 ([Wang et al. 2003](https://www.researchgate.net/publication/220723446_An_Industrial_Strength_Audio_Search_Algorithm)). The project is part of the Information Retrieval course of DSSC @ University of Trieste, from which the name, Shazir.
 
 Instructions
 ------------
