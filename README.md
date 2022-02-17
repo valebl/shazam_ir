@@ -20,7 +20,7 @@ Activate the environment.
 
     conda activate shazir
 
-Since PyAudio is not supported directly in Anaconda for the recent python versions, you need to install it using pip and the correct wheel. For python 3.9 64 bit the file is already provided in the repository (`PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl`), otherwise you need to look at [PyAudio](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio) and download the correct wheel. In the folder where your .whl file type:
+Since PyAudio is not supported directly in Anaconda for the recent python versions, you need to install it using pip and the correct wheel. For python 3.9 64 bit the file is already provided in the repository (`PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl`), otherwise you need to look at [PyAudio](https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio) and download the correct wheel. In the folder where your .whl file is type:
 
     pip install PyAudio‑0.2.11‑cp39‑cp39‑win_amd64.whl 
     
