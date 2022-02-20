@@ -101,11 +101,11 @@ def plot_matching_hash_locations(fingerprints_track, fingerprints_recording,
             fingerprints
     '''
 
-    def _plot_hash_locations(matching_times_track, matching_times__recording, score):
+    def _plot_hash_locations(matching_times_track, matching_times_recording, score):
     
         fig, ax = plt.subplots(figsize=(20,10))
 
-        ax.scatter(matching_times_track, matching_times__recording, s=100, 
+        ax.scatter(matching_times_track, matching_times_recording, s=100, 
             facecolors="None", edgecolor='teal')  
 
         plt.xlabel('Track time [s]')
@@ -138,7 +138,7 @@ def plot_matching_hash_locations(fingerprints_track, fingerprints_recording,
             title = f'Histogram of differences of time offsets of {track_name} (score = {score})'
             export_name = dir_output + f'Histogram_time_offsets_differences_{track_name}.jpg'
         
-        plt.xlabel('(Offset track time - offset sample time) [s]')
+        plt.xlabel('(Track time - Sample time) [s]')
         plt.title(title)
         plt.savefig(export_name)
 

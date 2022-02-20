@@ -100,7 +100,7 @@ def fingerprint_recording(recording_file, amp_thresh = AMP_THRESH):
 ### Helper functions in the following
 
 
-def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh=0.6):
+def make_peaks_constellation(times, frequencies, amplitudes, amp_thresh=AMP_THRESH):
 
     '''make_peaks_constellation: identifies peaks in the spectrogram. Peaks are
     time-frequency points that have higher energy content then all
