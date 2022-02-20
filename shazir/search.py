@@ -15,20 +15,18 @@ def searching_matching_track(fingerprints_dict, metadata_db, fingerprints_record
     '''
     
     time_offset_dict = dict()
-    track_ids = set()
     match = None
     max_score = 0
 
     for k in fingerprints_recording.keys():
         if k in fingerprints_dict.keys():
             for track_id in fingerprints_dict[k].keys():
-                track_ids.add(track_id)
                 try:
                     time_offset_dict[track_id].append(fingerprints_dict[k][track_id] - fingerprints_recording[k])
                 except:
                     time_offset_dict[track_id] = [fingerprints_dict[k][track_id] - fingerprints_recording[k]]
                     
-    for track_id in track_ids:             
+    for track_id in time_offset_dict.keys():         
         track_score = max(np.histogram(time_offset_dict[track_id], bins='sqrt')[0])
         if track_score > max_score:
             match = track_id
