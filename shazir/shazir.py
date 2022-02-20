@@ -18,7 +18,6 @@ if __name__ == '__main__':
 
     if len(sys.argv) == 2 and str(sys.argv[1]).endswith('.wav'):
         recording_file = str(sys.argv[1])
-        recording_file = 'recording.wav'
         fingerprints_recording = fingerprint_recording(recording_file,
             amp_thresh=AMP_THRES)
         searching_matching_track(fingerprints_db, metadata_db, fingerprints_recording)
