@@ -7,49 +7,6 @@ from preprocess import process_audio_file
 AMP_THRESH = 0.7
 
 
-def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
-    amp_thresh = AMP_THRESH, offset_time = 1, offset_freq = 500, delta_time = 10,
-    delta_freq = 1000, fan_out = 15):
-
-    '''make_fingerprint: takes in imput an audio file in .wav and performs
-    the fingerprinting of it.
-
-    Args:
-        audio_file: audio file in .wav
-        frame_size: number of samples in the time frame - should be a
-            power of two
-        hop_size: number of time samples in between successive frames - should
-            be a power of two
-        amp_thresh: minimum amplitude value for a point to be considered
-            a candidate peak
-        offset_time: minimum time distance from the anchor point time value
-            for a peak to be a possible pair 
-        offset_frequency: minimum frequency distance from the anchor point
-            frequency value for a peak to be a possible pair 
-        delta_time: determines the maximum time value for a peak to be a
-            possible pair
-        delta_freq: determines the maximum frequency value for a peak to be
-            a possible pair
-        fan_out: maximum number of pairs for each peak in the combinatorial
-            hashing
-
-    Returns:
-        A dictionary representing the fingerprints of the input audio.
-    '''
-    
-    times, frequencies, amplitudes = process_audio_file(audio_file,
-        frame_size, hop_size)
-
-    peaks_times, peaks_frequencies = make_peaks_constellation(times,
-        frequencies, amplitudes, amp_thresh)
-    
-    fingerprints_dict = make_combinatorial_hashes(peaks_times,
-        peaks_frequencies, offset_time, offset_freq, delta_time, delta_freq,
-        fan_out)
-    
-    return fingerprints_dict
-
-
 def fingerprint_track_and_add_to_database(track_file, fingerprints_dict,
     metadata_db):
 
@@ -96,6 +53,49 @@ def fingerprint_recording(recording_file, amp_thresh = AMP_THRESH):
 
     return fingerprints_recording
 
+
+def make_fingerprint(audio_file, frame_size = 2048, hop_size = 512,
+    amp_thresh = AMP_THRESH, offset_time = 1, offset_freq = 500, delta_time = 10,
+    delta_freq = 1000, fan_out = 15):
+
+    '''make_fingerprint: takes in imput an audio file in .wav and performs
+    the fingerprinting of it.
+
+    Args:
+        audio_file: audio file in .wav
+        frame_size: number of samples in the time frame - should be a
+            power of two
+        hop_size: number of time samples in between successive frames - should
+            be a power of two
+        amp_thresh: minimum amplitude value for a point to be considered
+            a candidate peak
+        offset_time: minimum time distance from the anchor point time value
+            for a peak to be a possible pair 
+        offset_frequency: minimum frequency distance from the anchor point
+            frequency value for a peak to be a possible pair 
+        delta_time: determines the maximum time value for a peak to be a
+            possible pair
+        delta_freq: determines the maximum frequency value for a peak to be
+            a possible pair
+        fan_out: maximum number of pairs for each peak in the combinatorial
+            hashing
+
+    Returns:
+        A dictionary representing the fingerprints of the input audio.
+    '''
+    
+    times, frequencies, amplitudes = process_audio_file(audio_file,
+        frame_size, hop_size)
+
+    peaks_times, peaks_frequencies = make_peaks_constellation(times,
+        frequencies, amplitudes, amp_thresh)
+    
+    fingerprints_dict = make_combinatorial_hashes(peaks_times,
+        peaks_frequencies, offset_time, offset_freq, delta_time, delta_freq,
+        fan_out)
+    
+    return fingerprints_dict
+    
 
 ### Helper functions in the following
 
